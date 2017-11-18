@@ -39,7 +39,7 @@ Senaryo bilgilerini bulunduran dosya
         	
         execution type : S : Standart : yanına | ile ayırıp (isblocker(true/false)) eklenebilir : bu işi fail edince senaryo bloklansın mı ?  default ya da verilmezse true olacak Diğer iş türlerinde anlamı yok.
         				 M : Manuel
-        				 DELAY(ms) : Tekrarlı
+        				 DELAY(sn) : Tekrarlı
         				 
         start date/time (gg:aa:yyyy hh:mm:ss) veya (hh:mm:ss basladigi gunu kabul edip calisir)
         timeout(sn)
