@@ -53,7 +53,7 @@ scheduledDays(opsiyonel, varsayılan : 1,2,3,4,5,6,7) : Çalışma günleri, Tlo
 <entry key="schedulerLowerThreshold">3</entry>
 
 <entry key="usemail">true</entry>
-<!-- entry key="statusListForMail">READY,WORKING,WAITING,SUCCESS,FAIL,TIMEOUT</entry -->
+<!-- entry key="statusListForMail">READY(0),WORKING,WAITING,SUCCESS,FAIL,TIMEOUT(5)</entry -->
 <entry key="statusListForMail">5</entry>
 <entry key="emaildestinationList">serkan.tas@likyateknoloji.com</entry>
 <entry key="useencryption">false</entry>
