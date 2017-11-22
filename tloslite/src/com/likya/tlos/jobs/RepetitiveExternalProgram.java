@@ -27,6 +27,7 @@ import com.likya.tloslite.model.DependencyInfo;
 import com.likya.tlos.model.JobProperties;
 import com.likya.tlos.model.TlosInfo;
 import com.likya.tlos.utils.DateUtils;
+import com.likya.tlos.utils.ExceptionUtils;
 import com.likya.tlos.utils.FileUtils;
 import com.likya.tlos.utils.JobQueueOperations;
 import com.likya.tlos.utils.LocaleMessages;
@@ -257,16 +258,15 @@ public class RepetitiveExternalProgram extends Job {
 				outputGobbler = null;
 				watchDogTimer = null;
 
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				if (watchDogTimer != null) {
 					watchDogTimer.interrupt();
 					watchDogTimer = null;
 				}
 				getJobProperties().setStatus(JobProperties.FAIL);
 				e.printStackTrace();
-			} catch (Exception err) {
-				err.printStackTrace();
-			}
+				ExceptionUtils.sendToLoj4j(e);
+			} 
 
 			sendEmail();
 			sendSms();
