@@ -105,6 +105,11 @@ public class ScenarioLoader {
 			}
 
 			properties.remove("version"); //$NON-NLS-1$
+			
+			if(properties.size() == 0) {
+				schedulerLogger.fatal(LocaleMessages.getString("ScenarioLoader.30")); //$NON-NLS-1$
+				return false;
+			}
 
 			Enumeration<Object> keyEnums = properties.keys();
 
