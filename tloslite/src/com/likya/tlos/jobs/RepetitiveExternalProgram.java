@@ -27,6 +27,7 @@ import com.likya.tloslite.model.DependencyInfo;
 import com.likya.tlos.model.JobProperties;
 import com.likya.tlos.model.TlosInfo;
 import com.likya.tlos.utils.DateUtils;
+import com.likya.tlos.utils.ExceptionUtils;
 import com.likya.tlos.utils.FileUtils;
 import com.likya.tlos.utils.JobQueueOperations;
 import com.likya.tlos.utils.LocaleMessages;
@@ -257,16 +258,15 @@ public class RepetitiveExternalProgram extends Job {
 				outputGobbler = null;
 				watchDogTimer = null;
 
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				if (watchDogTimer != null) {
 					watchDogTimer.interrupt();
 					watchDogTimer = null;
 				}
 				getJobProperties().setStatus(JobProperties.FAIL);
 				e.printStackTrace();
-			} catch (Exception err) {
-				err.printStackTrace();
-			}
+				ExceptionUtils.sendToLoj4j(e);
+			} 
 
 			sendEmail();
 			sendSms();
@@ -281,7 +281,7 @@ public class RepetitiveExternalProgram extends Job {
 			// restore to the value derived from sernayobilgileri file.
 			getJobProperties().setJobParamList(getJobProperties().getJobParamListPerm());
 			
-			boolean runEvenFailed = getJobProperties().isSafeRestart(); 
+			boolean runEvenFailed = getJobProperties().isAutoRetry();
 			
 			if ((runEvenFailed && getJobProperties().getStatus() == JobProperties.FAIL) || getJobProperties().getStatus() == JobProperties.SUCCESS || getJobProperties().getStatus() == JobProperties.TIMEOUT) {
 				setWorkDurations(this, startTime);

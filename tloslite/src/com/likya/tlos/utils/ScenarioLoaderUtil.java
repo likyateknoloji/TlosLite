@@ -153,7 +153,7 @@ public class ScenarioLoaderUtil {
 
 		if (!jobProperties.isStandart() && !jobProperties.isManuel()) {
 			if (plannedEndTime.before(plannedStartTime) || (DateUtils.diff(plannedStartTime, plannedEndTime) < (jobProperties.getPeriodTime() * 1000))) {
-				schedulerLogger.fatal(LocaleMessages.getString("ScenarioLoader.0")); //$NON-NLS-1$
+				schedulerLogger.fatal(LocaleMessages.getString("ScenarioLoader.29") + " | "  + LocaleMessages.getString("ScenarioLoader.0")); //$NON-NLS-1$
 				return false;
 			}
 		}
