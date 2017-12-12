@@ -664,7 +664,7 @@ public class TlosServer extends TlosServerBase {
 			if(tlosParameters.isDetectTimeAnomaly()) {
 				JobQueueOperations.nextScenarioPeriodTime(jobQueue, getScenarioRuntimeProperties());
 				checkScenarioForTimeAnomaly();
-				JobQueueOperations.resetJobQueue(jobQueue, TlosServerBase.getScenarioRuntimeProperties().isScenarioTimeAnomaly());
+				JobQueueOperations.resetJobQueue(jobQueue, getScenarioRuntimeProperties().isScenarioTimeAnomaly());
 				getScenarioRuntimeProperties().resetScenarioTimeAnomalyParams();
 
 			} else {

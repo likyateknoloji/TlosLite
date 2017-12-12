@@ -342,7 +342,7 @@ public class JobQueueOperations {
 				if (status != exceptionStatus && status != JobProperties.DISABLED) {
 					scheduledJob.getJobProperties().setStatus(JobProperties.READY);
 					if(scheduledJob.getJobProperties().getTime().before(Calendar.getInstance().getTime()) || scenarioTimeAnomaly) {
-						DateUtils.iterateNextDate(scheduledJob.getJobProperties());
+						DateUtils.iterateNextDate(scheduledJob.getJobProperties(), scenarioTimeAnomaly);
 					}
 				}
 			}
