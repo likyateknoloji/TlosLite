@@ -274,6 +274,11 @@ public class ConfigLoader {
 				tlosParameters.setNormalizable(Validation.getBooleanString("normalize", normalizeStr.toString()));
 			}
 
+			Object detectTimeAnomalyStr = properties.get("detectTimeAnomaly"); //$NON-NLS-1$
+			if (detectTimeAnomalyStr != null) {
+				tlosParameters.setDetectTimeAnomaly(Validation.getBooleanString("detectTimeAnomaly", detectTimeAnomalyStr.toString()));
+			}
+			
 			Object scheduledDays = properties.get("scheduledDays"); //$NON-NLS-1$
 
 			if (scheduledDays != null) {

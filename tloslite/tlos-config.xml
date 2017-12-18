@@ -33,6 +33,8 @@ logfile : log dosyası
 schedulerFrequency : Scheduler'ın çalışma sıkılığı (sn)
 schedulerHigherThreshold : 
 schedulerLowerThreshold :
+detectTimeAnomaly : Senaryo bitiş zamanı, senaryonun bir sonraki başlangıç ve bitiş zamanları (T1-T2) aralığında kaldığı durumda scenarioTimeAnomaly oluşur. 
+                   Parametre true ise anomaly tespit edilip tüm işler T2 sonrasına ötelenir.
 managementPort : yönetim konsolu haberleşme portu
 managementBufferSize : yönetim konsolu buffer boyu
 normalize(opsiyonel, varsayılan : false) : Günlük öteleme parametresi, bu parametre true olur ise, tlos çalışmaya başadığında ya da 
@@ -51,11 +53,12 @@ scheduledDays(opsiyonel, varsayılan : 1,2,3,4,5,6,7) : Çalışma günleri, Tlo
 <entry key="scheduledDays">1,2,3,4,5,6,7</entry>
 <entry key="schedulerHigherThreshold">2</entry>
 <entry key="schedulerLowerThreshold">3</entry>
+<entry key="detectTimeAnomaly">true</entry>
 
 <entry key="usemail">true</entry>
 <!-- entry key="statusListForMail">READY(0),WORKING,WAITING,SUCCESS,FAIL,TIMEOUT(5)</entry -->
 <entry key="statusListForMail">5</entry>
-<entry key="emaildestinationList">serkan.tas@likyateknoloji.com</entry>
+<entry key="emaildestinationList">sahin_kekevi@yahoo.com</entry>
 <entry key="useencryption">false</entry>
 <entry key="emailusername">test9027@likyateknoloji.com</entry>
 <entry key="emailpassword">k=U6TS#wmSSF</entry>

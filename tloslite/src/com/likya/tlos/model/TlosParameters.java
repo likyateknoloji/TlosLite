@@ -69,6 +69,8 @@ public class TlosParameters {
 	private int httpAccessPort;
 
 	private boolean isNormalizable = false;
+	
+	private boolean detectTimeAnomaly = false;
 
 	private int[] scheduledDays;
 
@@ -222,6 +224,14 @@ public class TlosParameters {
 
 	public void setNormalizable(boolean isNormalizable) {
 		this.isNormalizable = isNormalizable;
+	}
+	
+	public boolean isDetectTimeAnomaly() {
+		return detectTimeAnomaly;
+	}
+
+	public void setDetectTimeAnomaly(boolean detectTimeAnomaly) {
+		this.detectTimeAnomaly = detectTimeAnomaly;
 	}
 
 	public int[] getScheduledDays() {
