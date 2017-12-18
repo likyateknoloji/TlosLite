@@ -205,7 +205,7 @@ public abstract class BaseProgram extends Job {
 					// Eğer elle çalıştırılan standart bir iş ise, ve bağımlılık listesinde değilse
 					// Normal çalışma zamanı geldiğinde tekrar çalışsın.
 					if(getJobProperties().getSubStatus() == JobProperties.MSTART && DependencyOperations.getDependencyList(getJobQueue(), getJobProperties().getKey()) == null) {
-						if(getJobProperties().getStatusBeforeMstart() == JobProperties.READY) {
+						if(getJobProperties().getStatusBeforeMstart() == JobProperties.READY || getJobProperties().getStatusBeforeMstart() == JobProperties.FAIL) {
 							getJobProperties().setStatus(JobProperties.READY);
 							getJobProperties().setSubStatus(JobProperties.READY);
 						} else {
