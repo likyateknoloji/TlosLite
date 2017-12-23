@@ -75,7 +75,7 @@ public abstract class TlosServerBase implements Runnable {
 	
 	private final String dateToken = new Long(Calendar.getInstance().getTimeInMillis()).toString();
 
-	protected static ScenarioRuntimeProperties scenarioRuntimeProperties = new ScenarioRuntimeProperties();
+	protected ScenarioRuntimeProperties scenarioRuntimeProperties = new ScenarioRuntimeProperties();
 	
 	public static Logger getLogger() {
 		return schedulerLogger;
@@ -200,13 +200,12 @@ public abstract class TlosServerBase implements Runnable {
 		return tlosCommInterface;
 	}
 
-	public static ScenarioRuntimeProperties getScenarioRuntimeProperties() {
+	public ScenarioRuntimeProperties getScenarioRuntimeProperties() {
 		return scenarioRuntimeProperties;
 	}
 
-	public void setScenarioRuntimeProperties(
-			ScenarioRuntimeProperties scenarioRuntimeProperties) {
-		TlosServerBase.scenarioRuntimeProperties = scenarioRuntimeProperties;
+	public void setScenarioRuntimeProperties(ScenarioRuntimeProperties scenarioRuntimeProperties) {
+		this.scenarioRuntimeProperties = scenarioRuntimeProperties;
 	}
 
 	public static HashMap<String, String> getDisabledJobQueue() {
