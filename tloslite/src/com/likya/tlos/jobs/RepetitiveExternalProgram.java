@@ -197,11 +197,11 @@ public class RepetitiveExternalProgram extends Job {
 					TlosServer.getLogger().info(getJobProperties().getKey().toString() + LocaleMessages.getString("ExternalProgram.6") + processExitValue); //$NON-NLS-1$
 					int successRetValue = JobProperties.PROCESS_EXIT_RC_SUCCESS;
 
-					String errStr = getJobProperties().getLogAnalyzeString();
+					String[] errStr = getJobProperties().getLogAnalyzeStrings();
 					boolean hasErrorInLog = false;
 					if (!getJobProperties().getLogFilePath().equals(ScenarioLoader.UNDEFINED_VALUE)) {
 						if (errStr != null) {
-							hasErrorInLog = FileUtils.analyzeFileForString(getJobProperties().getLogFilePath(), errStr);
+							hasErrorInLog = FileUtils.analyzeFileForStrings(getJobProperties().getKey().toString(), getJobProperties().getLogFilePath(), errStr);
 						}
 					} else if(errStr != null) {
 						TlosServer.getLogger().warn("jobFailString: \"" + errStr + "\" " + LocaleMessages.getString("ExternalProgram.1") + " !"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$

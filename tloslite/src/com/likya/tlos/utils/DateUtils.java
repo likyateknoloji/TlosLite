@@ -25,6 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.likya.tlos.TlosServer;
+import com.likya.tlos.TlosServerBase;
 import com.likya.tlos.model.JobProperties;
 import com.likya.tlos.utils.iterator.RestrictedDailyIterator;
 
@@ -86,7 +87,6 @@ public class DateUtils {
 	 * dailyIterator.next()
 	 */
 	public static void iterateNextDate(JobProperties jobProperties) {
-		
 		// Date tmpDate = jobProperties.getTime();
 		Date scenarioDate = jobProperties.getScenarioTime();
 		Date executionDate = jobProperties.getTime();
@@ -100,13 +100,13 @@ public class DateUtils {
 		 * değişecek
 		 */
 		// DailyIterator dailyIterator = new DailyIterator(tmpCal.get(Calendar.HOUR_OF_DAY), tmpCal.get(Calendar.MINUTE), tmpCal.get(Calendar.SECOND));
-		RestrictedDailyIterator restrictedDailyIterator = new RestrictedDailyIterator(tmpCal.get(Calendar.HOUR_OF_DAY), tmpCal.get(Calendar.MINUTE), tmpCal.get(Calendar.SECOND), TlosServer.getTlosParameters().getScheduledDays());
+		RestrictedDailyIterator restrictedDailyIterator = new RestrictedDailyIterator(tmpCal.get(Calendar.HOUR_OF_DAY), tmpCal.get(Calendar.MINUTE), tmpCal.get(Calendar.SECOND), TlosServer.getTlosParameters().getScheduledDays(), TlosServerBase.getScenarioRuntimeProperties().isScenarioTimeAnomaly());
 		jobProperties.setPreviousTime(DateUtils.getDate(executionDate));
 		jobProperties.setTime(restrictedDailyIterator.next());	
 		TlosServer.getLogger().debug(LocaleMessages.getString("DateUtils.13") + DateUtils.getDate(jobProperties.getTime())); //$NON-NLS-1$
 		TlosServer.getLogger().info(LocaleMessages.getString("DateUtils.14") + DateUtils.getDate(jobProperties.getTime())); //$NON-NLS-1$
 	}
-	
+
 	public static String getDuration(Date sDate) {
 		Date now = Calendar.getInstance().getTime();
 		long timeDiff = now.getTime() - sDate.getTime();

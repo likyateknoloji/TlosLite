@@ -74,7 +74,7 @@ public class JobProperties implements Serializable {
 	private int autoRetryDelay;
 	private ArrayList<Integer> discardList;
 	private boolean safeRestart;
-	private String logAnalyzeString;
+	private String[] logAnalyzeStrings;
 	
 	long periodTime;
 	int processExitValue;
@@ -331,14 +331,14 @@ public class JobProperties implements Serializable {
 	public void setScenarioTime(Date scenarioTime) {
 		this.scenarioTime = scenarioTime;
 	}
-
-	public String getLogAnalyzeString() {
-		return logAnalyzeString;
+	
+	public String[] getLogAnalyzeStrings() {
+		return logAnalyzeStrings;
 	}
 
-	public void setLogAnalyzeString(String logAnalyzeString) {
-		this.logAnalyzeString = logAnalyzeString;
-	}
+	public void setLogAnalyzeStrings(String[] logAnalyzeStrings) {
+		this.logAnalyzeStrings = logAnalyzeStrings;
+	}	
 
 	public long getWorkDurationNumeric() {
 		return workDurationNumeric;

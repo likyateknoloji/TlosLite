@@ -27,10 +27,20 @@ public class ScenarioRuntimeProperties {
 	private Date startTime;
 	private Date endTime;
 	
+	private Date scenarioPeriodT1;
+	private Date scenarioPeriodT2;
+	private boolean scenarioTimeAnomaly;
+	
 	public ScenarioRuntimeProperties() {
 		super();
 		this.startTime = Calendar.getInstance().getTime();
 		this.endTime = startTime;
+	}
+	
+	public void resetScenarioTimeAnomalyParams() {
+		setScenarioPeriodT1(null);
+		setScenarioPeriodT2(null);
+		setScenarioTimeAnomaly(false);
 	}
 	
 	public Date getStartTime() {
@@ -53,4 +63,29 @@ public class ScenarioRuntimeProperties {
 	public void setCurrentState(int currentState) {
 		this.currentState = currentState;
 	}
+
+	public Date getScenarioPeriodT1() {
+		return scenarioPeriodT1;
+	}
+
+	public void setScenarioPeriodT1(Date scenarioPeriodT1) {
+		this.scenarioPeriodT1 = scenarioPeriodT1;
+	}
+
+	public Date getScenarioPeriodT2() {
+		return scenarioPeriodT2;
+	}
+
+	public void setScenarioPeriodT2(Date scenarioPeriodT2) {
+		this.scenarioPeriodT2 = scenarioPeriodT2;
+	}
+
+	public boolean isScenarioTimeAnomaly() {
+		return scenarioTimeAnomaly;
+	}
+
+	public void setScenarioTimeAnomaly(boolean scenarioTimeAnomaly) {
+		this.scenarioTimeAnomaly = scenarioTimeAnomaly;
+	}
+	
 }

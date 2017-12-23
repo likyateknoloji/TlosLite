@@ -93,7 +93,7 @@ public class ObjectUtils {
 		jobPropertiesDest.setJobPlannedStartTime(jobPropertiesSrc.getJobPlannedStartTime());
 		jobPropertiesDest.setJobType(jobPropertiesSrc.getJobType());
 		jobPropertiesDest.setKey(jobPropertiesSrc.getKey());
-		jobPropertiesDest.setLogAnalyzeString(jobPropertiesSrc.getLogAnalyzeString());
+		jobPropertiesDest.setLogAnalyzeStrings(jobPropertiesSrc.getLogAnalyzeStrings());
 		jobPropertiesDest.setLogFilePath(jobPropertiesSrc.getLogFilePath());
 		jobPropertiesDest.setManuel(jobPropertiesSrc.isManuel());
 		jobPropertiesDest.setPeriodTime(jobPropertiesSrc.getPeriodTime());

@@ -660,9 +660,18 @@ public class TlosServer extends TlosServerBase {
 		}
 
 		if (resetQueue) {
-			JobQueueOperations.resetJobQueue(jobQueue);
-			getScenarioRuntimeProperties().setCurrentState(ScenarioRuntimeProperties.STATE_WAITING);
 			getScenarioRuntimeProperties().setEndTime(Calendar.getInstance().getTime());
+			if(tlosParameters.isDetectTimeAnomaly()) {
+				JobQueueOperations.nextScenarioPeriodTime(jobQueue, getScenarioRuntimeProperties());
+				checkScenarioForTimeAnomaly();
+				JobQueueOperations.resetJobQueue(jobQueue, TlosServerBase.getScenarioRuntimeProperties().isScenarioTimeAnomaly());
+				getScenarioRuntimeProperties().resetScenarioTimeAnomalyParams();
+
+			} else {
+				JobQueueOperations.resetJobQueue(jobQueue);
+			}
+			getScenarioRuntimeProperties().setCurrentState(ScenarioRuntimeProperties.STATE_WAITING);
+			
 			if (tlosParameters.isNormalizable()) {
 				schedulerLogger.info(LocaleMessages.getString("TlosServer.43")); //$NON-NLS-1$
 				JobQueueOperations.normalizeJobQueue(jobQueue);
@@ -710,5 +719,17 @@ public class TlosServer extends TlosServerBase {
 		// }
 		// }
 		// }
+	}
+	
+	private void checkScenarioForTimeAnomaly() {
+		
+		if(getScenarioRuntimeProperties().getEndTime().after(getScenarioRuntimeProperties().getScenarioPeriodT1()) && getScenarioRuntimeProperties().getEndTime().before(getScenarioRuntimeProperties().getScenarioPeriodT2())) {
+			getScenarioRuntimeProperties().setScenarioTimeAnomaly(true);
+			TlosServer.getLogger().info(LocaleMessages.getString("TlosServer.75") + scenarioRuntimeProperties.isScenarioTimeAnomaly());
+		} else {
+			getScenarioRuntimeProperties().setScenarioTimeAnomaly(false);
+			TlosServer.getLogger().info("ScenarioTimeAnomaly: " + scenarioRuntimeProperties.isScenarioTimeAnomaly());
+		}
+		
 	}
 }

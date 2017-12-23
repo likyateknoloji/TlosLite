@@ -33,10 +33,11 @@ import com.likya.tlos.TlosServer;
 import com.likya.tlos.jobs.ExternalProgram;
 import com.likya.tlos.jobs.Job;
 import com.likya.tlos.jobs.RepetitiveExternalProgram;
-import com.likya.tloslite.model.DependencyInfo;
 import com.likya.tlos.model.JobProperties;
 import com.likya.tlos.model.PersistObject;
+import com.likya.tlos.model.ScenarioRuntimeProperties;
 import com.likya.tlos.model.TlosParameters;
+import com.likya.tloslite.model.DependencyInfo;
 
 public class JobQueueOperations {
 
@@ -286,11 +287,52 @@ public class JobQueueOperations {
 		return true;
 	}
 
-	public static void resetJobQueue(HashMap<String, Job> jobQueue) {
-		resetJobQueue(JobProperties.READY, jobQueue);
+	/**
+	 * Kuyruğu externalProgram tipinde olan işler için tarıyarak
+	 * senaryonun bir sonraki başlangıç ve bitiş zamanlarını (T1-T2)
+	 * hesaplar. Bu değerler senaryo bitiş zamanı ile beraber 
+	 * scenarioTimeAnomaly'nin oluşup oluşmadığına karar vermek
+	 * için kullanılır.
+	 * 
+	 * @param jobQueue
+	 * @param scenarioRuntimeProperties
+	 */
+	public static void nextScenarioPeriodTime(HashMap<String, Job> jobQueue, ScenarioRuntimeProperties scenarioRuntimeProperties) {
+		
+		Date nextJobDate = null;
+		
+		Iterator<Job> jobsIterator = jobQueue.values().iterator();
+		while (jobsIterator.hasNext()) {
+			Job scheduledJob = jobsIterator.next();
+
+			if (scheduledJob instanceof ExternalProgram) {
+				nextJobDate = scheduledJob.getJobProperties().getTime();
+				TlosServer.getLogger().debug(LocaleMessages.getString("JobQueueOperations.99") + scheduledJob.getJobProperties().getKey() + " - " + DateUtils.getDate(scheduledJob.getJobProperties().getTime()));
+				if(scenarioRuntimeProperties.getScenarioPeriodT1() == null || nextJobDate.before(scenarioRuntimeProperties.getScenarioPeriodT1())) {
+					scenarioRuntimeProperties.setScenarioPeriodT1(nextJobDate);
+				}
+				if(scenarioRuntimeProperties.getScenarioPeriodT2() == null || nextJobDate.after(scenarioRuntimeProperties.getScenarioPeriodT2())) {
+					scenarioRuntimeProperties.setScenarioPeriodT2(nextJobDate);
+				}
+			}
+		}
+		
+		TlosServer.getLogger().info(LocaleMessages.getString("TlosServer.72") + DateUtils.getDate(scenarioRuntimeProperties.getEndTime()));
+		TlosServer.getLogger().info(LocaleMessages.getString("TlosServer.73") + DateUtils.getDate(scenarioRuntimeProperties.getScenarioPeriodT1()));
+		TlosServer.getLogger().info(LocaleMessages.getString("TlosServer.74") + DateUtils.getDate(scenarioRuntimeProperties.getScenarioPeriodT2()));
+		
+		return;
 	}
 
-	public static void resetJobQueue(int exceptionStatus, HashMap<String, Job> jobQueue) {
+	public static void resetJobQueue(HashMap<String, Job> jobQueue) {
+		resetJobQueue(JobProperties.READY, jobQueue, false);
+	}
+	
+	public static void resetJobQueue(HashMap<String, Job> jobQueue, boolean scenarioTimeAnomaly) {
+		resetJobQueue(JobProperties.READY, jobQueue, scenarioTimeAnomaly);
+	}
+
+	public static void resetJobQueue(int exceptionStatus, HashMap<String, Job> jobQueue, boolean scenarioTimeAnomaly) {
 		Iterator<Job> jobsIterator = jobQueue.values().iterator();
 		while (jobsIterator.hasNext()) {
 			Job scheduledJob = jobsIterator.next();
@@ -299,7 +341,7 @@ public class JobQueueOperations {
 				int status = scheduledJob.getJobProperties().getStatus();
 				if (status != exceptionStatus && status != JobProperties.DISABLED) {
 					scheduledJob.getJobProperties().setStatus(JobProperties.READY);
-					if(scheduledJob.getJobProperties().getTime().before(Calendar.getInstance().getTime())) {
+					if(scheduledJob.getJobProperties().getTime().before(Calendar.getInstance().getTime()) || scenarioTimeAnomaly) {
 						DateUtils.iterateNextDate(scheduledJob.getJobProperties());
 					}
 				}

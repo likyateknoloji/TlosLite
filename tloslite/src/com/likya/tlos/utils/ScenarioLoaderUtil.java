@@ -21,9 +21,9 @@ import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 
-import com.likya.tloslite.model.DependencyInfo;
 import com.likya.tlos.model.AutoRetryInfo;
 import com.likya.tlos.model.JobProperties;
+import com.likya.tloslite.model.DependencyInfo;
 
 public class ScenarioLoaderUtil {
 
@@ -164,6 +164,30 @@ public class ScenarioLoaderUtil {
 		jobProperties.setScenarioTime(plannedStartTime);
 
 		return true;
+	}
+	
+	public static String[] prepareLogAnalyzeStrings(Logger schedulerLogger, String logAnalyzeStringList) {
+		
+		StringTokenizer logAnalyzeStringTokenizer = new StringTokenizer(logAnalyzeStringList, "|"); //$NON-NLS-1$
+
+		String[] tmp = new String[logAnalyzeStringTokenizer.countTokens()];
+		String isTmpAllNull = null;
+		int counter = 0;
+		while (counter < tmp.length) {
+			String currentToken = logAnalyzeStringTokenizer.nextToken().trim();
+			if(currentToken != null && !currentToken.isEmpty() && !currentToken.trim().isEmpty()) {
+				tmp[counter] = currentToken;
+				isTmpAllNull = currentToken;
+			}
+			counter++;
+		}
+		
+		if (tmp.length == 0 || isTmpAllNull == null) {
+			schedulerLogger.error(LocaleMessages.getString("ScenarioLoader.45")); //$NON-NLS-1$
+			return null;
+		}
+
+		return tmp;
 	}
 
 }
