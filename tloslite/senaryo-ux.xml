@@ -53,7 +53,7 @@ Senaryo bilgilerini bulunduran dosya
         		fail edince hiç bir şey yapmaz
         bitis uyari kodu; Buraya listelenen ve | ile ayrilan kodlarla biten isler basarili sayilacak, eğer bu bilgi "yok" olarak set edilrise, hangi kodla biterse bitsin başarılı olacak.
         restartable (0,1) : Bu bilgi tekrarlı işler için başarısız da bitse devam et anlamına gelir, diğer işler için sadece bilgi amaçlıdır.
-        hata kelimesi (\null, HATA)
+        hata kelimesi : verilmek istenmezse (\null) seklinde, bir veya daha fazla hata kelimesi ise (HATA1|Hata2|hata3) seklinde girilebilir.
 -->
 </comment>
 <entry key="version">V1.8.2</entry>

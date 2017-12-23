@@ -381,7 +381,7 @@ public class FileUtils {
 		return outputBuffer;
 	}
 	
-	public static boolean analyzeFileForString(String fileName, String coloredLineIndicator) {
+	public static boolean analyzeFileForStrings(String jobName, String fileName, String[] coloredLineIndicators) {
 
 		FileInputStream fis = null;
 		InputStreamReader inputStreamReader = null;
@@ -396,8 +396,11 @@ public class FileUtils {
 			String bufferString = ""; //$NON-NLS-1$
 
 			while ((bufferString = bufferedReader.readLine()) != null) {
-				if (bufferString.indexOf(coloredLineIndicator) >= 0) {
-					retValue = true;
+				for(int i =0 ; i < coloredLineIndicators.length ; i++) {
+					if (bufferString.indexOf(coloredLineIndicators[i]) >= 0) {
+						retValue = true;
+						TlosServer.getLogger().info(jobName + " : " + fileName + " - " + LocaleMessages.getString("FileUtils.8") + " " + coloredLineIndicators[i] + " " + LocaleMessages.getString("FileUtils.9"));
+					}
 				}
 			}
 		} catch (FileNotFoundException fnfex) {

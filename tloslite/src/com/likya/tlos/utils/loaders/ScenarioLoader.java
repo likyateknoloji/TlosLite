@@ -359,11 +359,11 @@ public class ScenarioLoader {
 
 				jobProperties.setSafeRestart(Validation.getBooleanString("restartable", propertiesList.get(ScenarioLoader.SAFE_RESTART)));
 
-				if (propertiesList.size() > LOG_ANALYZE_STRING && propertiesList.get(LOG_ANALYZE_STRING) != null) {
+				if (propertiesList.size() > LOG_ANALYZE_STRING && propertiesList.get(LOG_ANALYZE_STRING) != null && !propertiesList.get(LOG_ANALYZE_STRING).trim().isEmpty()) {
 					if (!propertiesList.get(LOG_ANALYZE_STRING).toLowerCase().equals("\\null")) { //$NON-NLS-1$
-						jobProperties.setLogAnalyzeString(propertiesList.get(LOG_ANALYZE_STRING));
+						jobProperties.setLogAnalyzeStrings(ScenarioLoaderUtil.prepareLogAnalyzeStrings(schedulerLogger, propertiesList.get(LOG_ANALYZE_STRING)));
 					} else {
-						jobProperties.setLogAnalyzeString(null);
+						jobProperties.setLogAnalyzeStrings(null);
 					}
 				} else {
 					schedulerLogger.fatal(LocaleMessages.getString("ScenarioLoader.41")); //$NON-NLS-1$
