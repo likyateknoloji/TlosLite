@@ -281,7 +281,7 @@ public class RepetitiveExternalProgram extends Job {
 			// restore to the value derived from sernayobilgileri file.
 			getJobProperties().setJobParamList(getJobProperties().getJobParamListPerm());
 			
-			boolean runEvenFailed = getJobProperties().isAutoRetry();
+			boolean runEvenFailed = getJobProperties().isSafeRestart();
 			
 			if ((runEvenFailed && getJobProperties().getStatus() == JobProperties.FAIL) || getJobProperties().getStatus() == JobProperties.SUCCESS || getJobProperties().getStatus() == JobProperties.TIMEOUT) {
 				setWorkDurations(this, startTime);
