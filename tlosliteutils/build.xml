@@ -1,14 +1,17 @@
 <project name="tlosliteutils" default="build-all" basedir=".">
 	
+	<property file="../tloslite/version.info" />
+	
 	<property name="appname" value="tloslite-utils" />
 
 	<property file="build.properties" />
+	<echo>"${version.num}"</echo>
+	<echo>"${tlosLiteModel.dir}"</echo>
 	
 	<property name="src.dir" value="src" />
 	<property name="build.dir" value="bin" />
 	<property name="build.classes.dir" value="${build.dir}"/>
 	<property name="app.deploy.dir" value="${basedir}" />
-	<property name="version.num" value="1.8.2"/>
 
 	<target name="init" depends="init2" unless="minor.number">
 		<property name="minor.number" value="" />

@@ -11,8 +11,8 @@
 	<classpathentry kind="lib" path="/tloslite-libs/libs/mailapi.jar"/>
 	<classpathentry kind="lib" path="/tloslite-libs/libs/tlostestjob.jar"/>
 	<classpathentry kind="lib" path="/tloslite-libs/libs/winp.jar"/>
-	<classpathentry kind="lib" path="/tlosliteutils/tloslite-utils-1.8.2.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/licenselib"/>
 	<classpathentry kind="lib" path="/tloslite-libs/libs/smtp.jar"/>
+	<classpathentry kind="lib" path="/tlosliteutils/tloslite-utils.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

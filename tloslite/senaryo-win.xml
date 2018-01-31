@@ -56,7 +56,7 @@ Senaryo bilgilerini bulunduran dosya
         hata kelimesi : verilmek istenmezse (\null) seklinde, bir veya daha fazla hata kelimesi ise (HATA1|Hata2|hata3) seklinde girilebilir.
 -->
 </comment>
-<entry key="version">V1.8.2</entry>
+<entry key="version">V1.8.30</entry>
 <entry key="job1">A,jobs/job01.bat,system,logWin01.log,yok,S,00:00:00-23:59:59,300,false,0,1,\null</entry>
 <entry key="job2">A,jobs/job02.bat,system,logWin02.log,job1,S,00:00:00-23:59:59,300,false,0,1,\null</entry>
 </properties>

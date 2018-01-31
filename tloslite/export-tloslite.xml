@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="create_run_jar" name="Create Runnable Jar for Project TlosLite with libraries in sub-folder">
 
-	<property name="version" value="1.8.2" />
+	<property file="version.info" />
 
 	<property name="lib.dir" value="${basedir}/../../tloslitegroup/tloslite-libs/libs" />
 	<property name="img.dir" value="${basedir}/../../tloslitegroup/tloslite-libs/imgs" />
-	<property name="export.dir" value="${basedir}/../../../releases/tloslite_export-${version}" />
+	<property name="export.dir" value="${basedir}/../../../releases/tloslite_export-${version.num}" />
 	<property name="dist.dir" value="${basedir}/../../../releases/tlosliteDist" />
 	<property name="src.dir" value="${basedir}" />
 	<property name="export.lib.dir" value="${export.dir}/libs" />
@@ -26,9 +26,9 @@
 		</copy>
 		
 		<mkdir dir="${export.lib.dir}"/>
-		<copy file="${basedir}/tloslite-${version}.jar" todir="${export.dir}/"/>
-		<copy file="${basedir}/../tloslitemodel/tloslite-model-${version}.jar" todir="${export.lib.dir}"/>
-		<copy file="${basedir}/../tlosliteutils/tloslite-utils-${version}.jar" todir="${export.lib.dir}"/>
+		<copy file="${basedir}/tloslite-${version.num}.jar" todir="${export.dir}/"/>
+		<copy file="${basedir}/../tloslitemodel/tloslite-model-${version.num}.jar" todir="${export.lib.dir}"/>
+		<copy file="${basedir}/../tlosliteutils/tloslite-utils-${version.num}.jar" todir="${export.lib.dir}"/>
 
 		<copy file="${lib.dir}/commons-codec-1.4.jar" todir="${export.lib.dir}"/>
 		<copy file="${lib.dir}/commons-lang-2.6.jar" todir="${export.lib.dir}"/>
@@ -42,7 +42,7 @@
 		<copy file="${lib.dir}/winp.dll" todir="${export.lib.dir}"/>
 		<copy file="${lib.dir}/winp.x64.dll" todir="${export.lib.dir}"/>
 		
-		<copy file="${img.dir}/1.8.2.gif" todir="${export.dir}"/>
+		<copy file="${img.dir}/${version.num}.gif" todir="${export.dir}"/>
 		<copy file="${img.dir}/bk.jpg" todir="${export.dir}"/>
 
 		<copy file="${src.dir}/start-notr.bat" todir="${export.dir}"/>
@@ -82,9 +82,9 @@
 		<delete dir="${dist.dir}" />
 		<mkdir dir="${dist.dir}"/>
 
-		<tar destfile="${dist.dir}/tloslite-${version}.tar" basedir="${export.dir}"/>
-		<gzip destfile="${dist.dir}/tloslite-${version}.tar.gz" src="${dist.dir}/tloslite-${version}.tar"/>
-		<delete file="${dist.dir}/tloslite-${version}.tar"/>
+		<tar destfile="${dist.dir}/tloslite-${version.num}.tar" basedir="${export.dir}"/>
+		<gzip destfile="${dist.dir}/tloslite-${version.num}.tar.gz" src="${dist.dir}/tloslite-${version.num}.tar"/>
+		<delete file="${dist.dir}/tloslite-${version.num}.tar"/>
 
 	</target>
 </project>

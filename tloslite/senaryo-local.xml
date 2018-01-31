@@ -56,7 +56,7 @@ Senaryo bilgilerini bulunduran dosya
         hata kelimesi (\null, HATA)
 -->
 </comment>
-<entry key="version">V1.8.2</entry>
+<entry key="version">V1.8.30</entry>
 <!-- >entry key="job1">A,jobs/job01.sh,system,logUx01.log,yok,S,00:00:00-23:59:59,300,false,0,1,\null</entry>
 <entry key="job2">A,jobs/job02.sh,system,logUx02.log,job1,S,00:00:00-23:59:59,300,false,0,1,\null</entry-->
 <entry key="job3">A,jobs/job01.sh,system,logUx01.log,yok,M,00:00:00-23:59:59,-1,false,0,1,\null</entry>
