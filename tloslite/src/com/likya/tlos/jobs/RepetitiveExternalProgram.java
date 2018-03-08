@@ -52,6 +52,9 @@ public class RepetitiveExternalProgram extends Job {
 	private boolean isForced = false;
 	
 	private boolean isFirst = true;
+	
+	private int autoRetryCounter = 1;
+	private boolean inAutoRetryLoop = false;
 
 	transient private WatchDogTimer watchDogTimer = null;
 	private int wdtCounter = 0;
@@ -81,7 +84,7 @@ public class RepetitiveExternalProgram extends Job {
 			try {
 				
 				if (getJobProperties().getTime().before(Calendar.getInstance().getTime())) {
-					Date nextPeriodTime = DateUtils.findRangedNextPeriod(getJobProperties());
+					Date nextPeriodTime = DateUtils.findRangedNextPeriod(getJobProperties(), inAutoRetryLoop);
 					getJobProperties().setTime(nextPeriodTime);
 					TlosServer.getLogger().warn(LocaleMessages.getString("RepetitiveExternalProgram.3") + nextPeriodTime); //$NON-NLS-1$
 				}
@@ -288,6 +291,8 @@ public class RepetitiveExternalProgram extends Job {
 				TlosServer.getLogger().info(LocaleMessages.getString("ExternalProgram.9") + getJobProperties().getKey() + " => " + ObjectUtils.getStatusAsString(getJobProperties().getStatus())); //$NON-NLS-1$ //$NON-NLS-2$
 				getJobProperties().setStatus(JobProperties.READY);
 				setSomeoneBusy(false);
+				 //job  basarili oldu normal akisa geri dondu, autoretryloop'da ise cikariyoruz.
+				if (inAutoRetryLoop) inAutoRetryLoop = false;
 				continue;
 			} else {
 				setWorkDurations(this, startTime);
@@ -296,11 +301,20 @@ public class RepetitiveExternalProgram extends Job {
 				TlosServer.getLogger().debug(getJobProperties().getKey() + LocaleMessages.getString("ExternalProgram.13")); //$NON-NLS-1$
 
 				wdtCounter = 0;
-
-				// autoretry parametresi true ise job fail ettikten sonra 
-				// bir sonraki periyodda calismasi icin asagidaki kisim eklendi
-				if (getJobProperties().isAutoRetry()) {
-					continue;
+				
+				// is elle stop edildiginde otomatik olarak calismaya baslamasin diye bir onceki statu kontrolu eklendi
+				int onePreviousStatus = getJobProperties().getPreviousStatusList().get(getJobProperties().getPreviousStatusList().size() - 1);
+				
+				// autoretry parametresi true ise job fail ettikten sonra (isSafeRestart=false)  bir sonraki periyodda calismasi icin asagidaki kisim eklendi
+				if (getJobProperties().isAutoRetry() && onePreviousStatus != JobProperties.STOP) {
+					if(autoRetryCounter <= getJobProperties().getAutoRetryCount()) {
+						TlosServer.getLogger().info(LocaleMessages.getString("RepetitiveExternalProgram.10") + autoRetryCounter + "," + getJobProperties().getKey());
+						inAutoRetryLoop = true;
+						autoRetryCounter++;
+						continue;
+					} else {
+						inAutoRetryLoop = false;
+					}
 				}
 			}
 		
