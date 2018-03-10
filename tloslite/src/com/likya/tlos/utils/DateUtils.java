@@ -190,8 +190,21 @@ public class DateUtils {
 	}
 	
 	public static Date findRangedNextPeriod(JobProperties jobProperties) {
+		Date myDate = findRangedNextPeriod(jobProperties, false);
+		return myDate;
+	}
+	
+	public static Date findRangedNextPeriod(JobProperties jobProperties, boolean inAutoRetryLoop) {
 		
-		Date myDate = findNextPeriod(jobProperties.getTime(), jobProperties.getPeriodTime());
+		long periodTime;
+		
+		if(inAutoRetryLoop) {
+			periodTime = jobProperties.getAutoRetryDelay()/1000;
+		} else {
+			periodTime = jobProperties.getPeriodTime();
+		}
+		
+		Date myDate = findNextPeriod(jobProperties.getTime(), periodTime);
 		
 		jobProperties.setJobPlannedEndTime(changeDateValue(myDate, jobProperties.getJobPlannedEndTime()));
 		jobProperties.setJobPlannedStartTime(changeDateValue(myDate, jobProperties.getJobPlannedStartTime()));
