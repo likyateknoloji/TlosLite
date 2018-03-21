@@ -189,6 +189,7 @@ public abstract class BaseProgram extends Job {
 				setWorkDurations(this, startTime);
 
 				if(this instanceof ManuelExternalProgram) {
+					sendEmail();
 					getJobProperties().setStatus(JobProperties.READY);
 				} else {
 					if(Calendar.getInstance().getTime().before(getJobProperties().getJobPlannedStartTime())) {
@@ -201,6 +202,7 @@ public abstract class BaseProgram extends Job {
 					// Normal çalışma zamanı geldiğinde tekrar çalışsın.
 					if(getJobProperties().getSubStatus() == JobProperties.MSTART && DependencyOperations.getDependencyList(getJobQueue(), getJobProperties().getKey()) == null) {
 						if(getJobProperties().getStatusBeforeMstart() == JobProperties.READY || getJobProperties().getStatusBeforeMstart() == JobProperties.SUCCESS) {
+							sendEmail();
 							getJobProperties().setStatus(JobProperties.READY);
 							getJobProperties().setSubStatus(JobProperties.READY);
 						} else {

@@ -51,18 +51,18 @@ scheduledDays(opsiyonel, varsayılan : 1,2,3,4,5,6,7) : Çalışma günleri, Tlo
 <entry key="ispersistent">false</entry>
 <entry key="schedulerFrequency">1</entry>
 <entry key="scheduledDays">1,2,3,4,5,6,7</entry>
-<entry key="schedulerHigherThreshold">2</entry>
+<entry key="schedulerHigherThreshold">6</entry>
 <entry key="schedulerLowerThreshold">3</entry>
 <entry key="detectTimeAnomaly">true</entry>
 
-<entry key="usemail">true</entry>
-<!-- entry key="statusListForMail">READY(0),WORKING,WAITING,SUCCESS,FAIL,TIMEOUT(5)</entry -->
-<entry key="statusListForMail">5</entry>
-<entry key="emaildestinationList">sahin_kekevi@yahoo.com</entry>
+<entry key="usemail">false</entry>
+<!-- entry key="statusListForMail">WORKING(2),SUCCESS,FAIL,TIMEOUT(5)</entry -->
+<entry key="statusListForMail">2,3,4,5</entry>
+<entry key="emaildestinationList">aaaaaa@likyateknoloji.com</entry>
 <entry key="useencryption">false</entry>
-<entry key="emailusername">test9027@likyateknoloji.com</entry>
-<entry key="emailpassword">k=U6TS#wmSSF</entry>
-<entry key="smtpserver">mail.likyateknoloji.com</entry>
+<entry key="emailusername">xxxxx@likyateknoloji.com</entry>
+<entry key="emailpassword">xyz</entry>
+<entry key="smtpserver">mail.server.co</entry>
 <entry key="smtpport">587</entry>
 
 <entry key="logfile">TlosEkran.log</entry>
