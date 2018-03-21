@@ -43,7 +43,6 @@ public abstract class BaseProgram extends Job {
 	private int retryCounter = 1;
 
 	transient private WatchDogTimer watchDogTimer = null;
-	private int wdtCounter = 0;
 	
 	public BaseProgram(HashMap<String, Job> jobQueue, JobProperties jobProperties, boolean isMail, boolean isSms) {
 		super(jobQueue, jobProperties, isMail, isSms);
@@ -77,12 +76,10 @@ public abstract class BaseProgram extends Job {
 				getJobProperties().setRecentWorkDuration(getJobProperties().getWorkDuration());
 				getJobProperties().setRecentWorkDurationNumeric(getJobProperties().getWorkDurationNumeric());
 
-				if (getJobProperties().getTimeout() > 0 && !(getJobProperties().isAutoRetry() && wdtCounter > 0)) {
+				if (getJobProperties().getTimeout() > 0) {
 					watchDogTimer = new WatchDogTimer(this, getJobProperties().getKey().toString(), Thread.currentThread(), getJobProperties().getTimeout());
 					watchDogTimer.setName(getJobProperties().getKey().toString() + ".WatchDogTimer.id." + watchDogTimer.getId()); //$NON-NLS-1$
 					watchDogTimer.start();
-					
-					wdtCounter++;
 				}
 
 				String[] cmd = null; 
@@ -124,11 +121,9 @@ public abstract class BaseProgram extends Job {
 					} else if(errStr != null) {
 						TlosServer.getLogger().error("jobFailString: \"" + errStr + "\" " + LocaleMessages.getString("ExternalProgram.1") + " !"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 					}
-					/**
-					 * 17.11.2008 Aşağıdaki kısım yerine, artık warning
-					 * değerleri bir diziden okunacak.
-					 * 
-					 */
+					
+					/** 17.11.2008 Aşağıdaki kısım yerine, artık warning
+					 * değerleri bir diziden okunacak.*/
 
 					if(((processExitValue == successRetValue) || getJobProperties().inDiscardList(processExitValue)) && !((errStr != null) && hasErrorInLog)) {
 						getJobProperties().setStatus(JobProperties.SUCCESS); 	
@@ -194,6 +189,7 @@ public abstract class BaseProgram extends Job {
 				setWorkDurations(this, startTime);
 
 				if(this instanceof ManuelExternalProgram) {
+					sendEmail();
 					getJobProperties().setStatus(JobProperties.READY);
 				} else {
 					if(Calendar.getInstance().getTime().before(getJobProperties().getJobPlannedStartTime())) {
@@ -205,7 +201,8 @@ public abstract class BaseProgram extends Job {
 					// Eğer elle çalıştırılan standart bir iş ise, ve bağımlılık listesinde değilse
 					// Normal çalışma zamanı geldiğinde tekrar çalışsın.
 					if(getJobProperties().getSubStatus() == JobProperties.MSTART && DependencyOperations.getDependencyList(getJobQueue(), getJobProperties().getKey()) == null) {
-						if(getJobProperties().getStatusBeforeMstart() == JobProperties.READY) {
+						if(getJobProperties().getStatusBeforeMstart() == JobProperties.READY || getJobProperties().getStatusBeforeMstart() == JobProperties.SUCCESS) {
+							sendEmail();
 							getJobProperties().setStatus(JobProperties.READY);
 							getJobProperties().setSubStatus(JobProperties.READY);
 						} else {
@@ -227,7 +224,7 @@ public abstract class BaseProgram extends Job {
 				if (getJobProperties().isAutoRetry() && retryFlag && onePreviousStatus != JobProperties.STOP) {
 					TlosServer.getLogger().info(LocaleMessages.getString("ExternalProgram.11") + getJobProperties().getKey()); //$NON-NLS-1$
 
-					if(retryCounter < getJobProperties().getAutoRetryCount()) {
+					if(retryCounter <= getJobProperties().getAutoRetryCount()) {
 						retryCounter++;
 						try {
 							Thread.sleep(getJobProperties().getAutoRetryDelay());
@@ -269,8 +266,6 @@ public abstract class BaseProgram extends Job {
 		setMyExecuter(null);
 		process = null;
 		
-//		retryFlag = true;
-		wdtCounter = 0;
 	}
 
 	public boolean isRetryFlag() {
