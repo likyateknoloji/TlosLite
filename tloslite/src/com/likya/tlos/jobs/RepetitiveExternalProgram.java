@@ -57,11 +57,29 @@ public class RepetitiveExternalProgram extends Job {
 	private boolean inAutoRetryLoop = false;
 
 	transient private WatchDogTimer watchDogTimer = null;
-	private int wdtCounter = 0;
 
 	public RepetitiveExternalProgram(HashMap<String, Job> jobQueue, JobProperties jobProperties, boolean isMail, boolean isSms) {
 		super(jobQueue, jobProperties, isMail, isSms);
 	}
+	
+	/**
+	 * @author sahin Kekevi 14.03.2018 Tekrarlı iş davranışını etkileyen 4 ana parametre:
+	 *         1=timeOut, 2=jobStatus, 3=autoRetry, 4=safeToRestart
+	 *         
+	 *         1.timeOut > 0 ise watchDogTimer timeOut süresini takip eder, 
+	 *         workDuration > timeOut ise aksiyon alır.
+	 *         
+	 *         2.processExitValue, discardList, hasErrorInLog ve timeOut değerlerine bağlı 
+	 *         olarak jobStatus = SUCCESS || jobStatus = FAIL
+	 *         
+	 *         3.autoRetry = true|30000|3 ise FAIL eden iş belirtilen tekrar sayısı (3) ile
+	 *         verilen bekleme süresi (30sn) aralığıyla tekrar denenir. Herhangi bir denemede 
+	 *         jobStatus = SUCCESS olursa iş normal akışına geri döner.
+	 *         
+	 * 		   4.safeToRestart = true ise iş hatalı bitsede (jobStatus = FAIL) denemeye devam et,
+	 *         FAKAT burada akışı yönetme önceliği autoRetry parametresinde, safeToRestart ikinci
+	 *         planda.
+	 */
 
 	public void run() {
 
@@ -155,12 +173,10 @@ public class RepetitiveExternalProgram extends Job {
 				
 				jobKey = getJobProperties().getKey().toString();
 
-				if (getJobProperties().getTimeout() > 0 && !(getJobProperties().isAutoRetry() && wdtCounter > 0)) {
+				if (getJobProperties().getTimeout() > 0) {
 					watchDogTimer = new WatchDogTimer(this, getJobProperties().getKey().toString(), Thread.currentThread(), getJobProperties().getTimeout());
 					watchDogTimer.setName(jobKey + ".WatchDogTimer.id." + watchDogTimer.getId()); //$NON-NLS-1$
 					watchDogTimer.start();
-	
-					wdtCounter++;
 				}
 
 				String[] cmd = null;
@@ -247,8 +263,7 @@ public class RepetitiveExternalProgram extends Job {
 					// Stop the process from running
 					TlosServer.getLogger().warn(LocaleMessages.getString("ExternalProgram.8") + getJobProperties().getKey()); //$NON-NLS-1$
 
-					// process.waitFor() komutu thread'in interrupt statusunu temizlemedigi icin 
-					// asagidaki sekilde temizliyoruz
+					// process.waitFor() komutu thread'in interrupt statusunu temizlemedigi icin  asagidaki sekilde temizliyoruz
 					Thread.interrupted();
 
 					process.destroy();
@@ -274,7 +289,7 @@ public class RepetitiveExternalProgram extends Job {
 			sendEmail();
 			sendSms();
 
-			// Hangi koşulda biterse bitsin geçen zaman saklanıyor
+			// Hangi kosulda biterse bitsin geçen zaman saklanıyor
 			Date endTime = Calendar.getInstance().getTime();
 			long timeDiff = endTime.getTime() - startTime.getTime();
 			
@@ -284,39 +299,45 @@ public class RepetitiveExternalProgram extends Job {
 			// restore to the value derived from sernayobilgileri file.
 			getJobProperties().setJobParamList(getJobProperties().getJobParamListPerm());
 			
-			boolean runEvenFailed = getJobProperties().isSafeRestart();
+			setWorkDurations(this, startTime);
 			
-			if ((runEvenFailed && getJobProperties().getStatus() == JobProperties.FAIL) || getJobProperties().getStatus() == JobProperties.SUCCESS || getJobProperties().getStatus() == JobProperties.TIMEOUT) {
-				setWorkDurations(this, startTime);
-				TlosServer.getLogger().info(LocaleMessages.getString("ExternalProgram.9") + getJobProperties().getKey() + " => " + ObjectUtils.getStatusAsString(getJobProperties().getStatus())); //$NON-NLS-1$ //$NON-NLS-2$
+			if(getJobProperties().getStatus() == JobProperties.TIMEOUT) {
+				//Pek mumkun gorulmuyor, akis geregi girmemesi lazim. log atip cikmali, giris olursa nedeni arastirilmali
+				TlosServer.getLogger().info(LocaleMessages.getString("RepetitiveExternalProgram.11") + getJobProperties().getStatus());
+				
+			} else if(getJobProperties().getStatus() == JobProperties.SUCCESS) {
+				TlosServer.getLogger().info(LocaleMessages.getString("ExternalProgram.9") + getJobProperties().getKey() + " => " + ObjectUtils.getStatusAsString(getJobProperties().getStatus()));
 				getJobProperties().setStatus(JobProperties.READY);
 				setSomeoneBusy(false);
-				 //job  basarili oldu normal akisa geri dondu, autoretryloop'da ise cikariyoruz.
-				if (inAutoRetryLoop) inAutoRetryLoop = false;
 				continue;
-			} else {
-				setWorkDurations(this, startTime);
-
-				TlosServer.getLogger().info(getJobProperties().getKey() + LocaleMessages.getString("ExternalProgram.12")); //$NON-NLS-1$
-				TlosServer.getLogger().debug(getJobProperties().getKey() + LocaleMessages.getString("ExternalProgram.13")); //$NON-NLS-1$
-
-				wdtCounter = 0;
+				
+			} else if (getJobProperties().getStatus() == JobProperties.FAIL) {
 				
 				// is elle stop edildiginde otomatik olarak calismaya baslamasin diye bir onceki statu kontrolu eklendi
 				int onePreviousStatus = getJobProperties().getPreviousStatusList().get(getJobProperties().getPreviousStatusList().size() - 1);
-				
-				// autoretry parametresi true ise job fail ettikten sonra (isSafeRestart=false)  bir sonraki periyodda calismasi icin asagidaki kisim eklendi
-				if (getJobProperties().isAutoRetry() && onePreviousStatus != JobProperties.STOP) {
-					if(autoRetryCounter <= getJobProperties().getAutoRetryCount()) {
+
+				if (onePreviousStatus != JobProperties.STOP) {
+					if (getJobProperties().isAutoRetry()	&& autoRetryCounter <= getJobProperties().getAutoRetryCount()) {
 						TlosServer.getLogger().info(LocaleMessages.getString("RepetitiveExternalProgram.10") + autoRetryCounter + "," + getJobProperties().getKey());
 						inAutoRetryLoop = true;
 						autoRetryCounter++;
 						continue;
 					} else {
 						inAutoRetryLoop = false;
+						autoRetryCounter = 0;
+						if (getJobProperties().isSafeRestart()) {
+							TlosServer.getLogger().info(LocaleMessages.getString("ExternalProgram.9") + getJobProperties().getKey() + " => " + ObjectUtils.getStatusAsString(getJobProperties().getStatus()));
+							getJobProperties().setStatus(JobProperties.READY);
+							setSomeoneBusy(false);
+							continue;
+						}
 					}
+
+				} else {
+					//Pek mumkun gorulmuyor, akis geregi girmemesi lazim. log atip cikmali, giris olursa nedeni arastirilmali
+					TlosServer.getLogger().info(LocaleMessages.getString("RepetitiveExternalProgram.11") + getJobProperties().getStatus());
 				}
-			}
+			  }
 		
 			process = null;
 

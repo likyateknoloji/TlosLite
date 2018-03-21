@@ -203,7 +203,7 @@ public class DateUtils {
 		} else {
 			periodTime = jobProperties.getPeriodTime();
 		}
-		
+		 
 		Date myDate = findNextPeriod(jobProperties.getTime(), periodTime);
 		
 		jobProperties.setJobPlannedEndTime(changeDateValue(myDate, jobProperties.getJobPlannedEndTime()));
