@@ -222,7 +222,7 @@ public abstract class BaseProgram extends Job {
 				if (getJobProperties().isAutoRetry() && retryFlag && onePreviousStatus != JobProperties.STOP) {
 					TlosServer.getLogger().info(LocaleMessages.getString("ExternalProgram.11") + getJobProperties().getKey()); //$NON-NLS-1$
 
-					if(retryCounter < getJobProperties().getAutoRetryCount()) {
+					if(retryCounter <= getJobProperties().getAutoRetryCount()) {
 						retryCounter++;
 						try {
 							Thread.sleep(getJobProperties().getAutoRetryDelay());
