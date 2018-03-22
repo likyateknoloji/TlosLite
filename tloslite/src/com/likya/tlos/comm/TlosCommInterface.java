@@ -76,7 +76,13 @@ public class TlosCommInterface {
 			Job myJob = TlosServer.getJobQueue().get(jobName);
 			if (myJob.getJobProperties().getStatus() == JobProperties.FAIL || myJob.getJobProperties().getStatus() == JobProperties.PAUSE) {
 				if (myJob instanceof ExternalProgram) {
-					DateUtils.iterateNextDate(myJob.getJobProperties());
+					//Job'in planlanan calisma vakti gelmediyse (elle manuel calistirildiysa), calisma zamanini planlanan zamana kur
+					//planlanan calisma zamani gectiyse bu durumda da calisma zamanini bir sonraki calisma zamanina kur
+					if(Calendar.getInstance().getTime().before(myJob.getJobProperties().getJobPlannedStartTime())) {
+						myJob.getJobProperties().setTime(myJob.getJobProperties().getJobPlannedStartTime());
+					} else {
+						DateUtils.iterateNextDate(myJob.getJobProperties());
+					}
 				}
 				myJob.getJobProperties().setStatus(JobProperties.SUCCESS);
 				TlosServer.getLogger().info(LocaleMessages.getString("TlosCommInterface.4") + jobName + " : " + ObjectUtils.getStatusAsString(myJob.getJobProperties().getStatus())); //$NON-NLS-1$ //$NON-NLS-2$
@@ -95,7 +101,13 @@ public class TlosCommInterface {
 			JobProperties jobProperties = myJob.getJobProperties();
 			if (isForced || jobProperties.getStatus() == JobProperties.FAIL || jobProperties.getStatus() == JobProperties.PAUSE) {
 				if (myJob instanceof ExternalProgram) {
-					DateUtils.iterateNextDate(jobProperties);
+					//Job'in planlanan calisma vakti gelmediyse (elle manuel calistirildiysa), calisma zamanini planlanan zamana kur
+					//planlanan calisma zamani gectiyse bu durumda da calisma zamanini bir sonraki calisma zamanina kur
+					if(Calendar.getInstance().getTime().before(myJob.getJobProperties().getJobPlannedStartTime())) {
+						myJob.getJobProperties().setTime(myJob.getJobProperties().getJobPlannedStartTime());
+					} else {
+						DateUtils.iterateNextDate(myJob.getJobProperties());
+					}
 				}
 				myJob.getJobProperties().setStatus(JobProperties.SKIP);
 				TlosServer.getLogger().info(LocaleMessages.getString("TlosCommInterface.7") + jobName + " : " + ObjectUtils.getStatusAsString(myJob.getJobProperties().getStatus())); //$NON-NLS-1$ //$NON-NLS-2$
