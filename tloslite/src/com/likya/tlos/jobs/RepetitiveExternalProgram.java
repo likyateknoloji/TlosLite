@@ -324,7 +324,7 @@ public class RepetitiveExternalProgram extends Job {
 						continue;
 					} else {
 						inAutoRetryLoop = false;
-						autoRetryCounter = 0;
+						autoRetryCounter = 1;
 						if (getJobProperties().isSafeRestart()) {
 							TlosServer.getLogger().info(LocaleMessages.getString("ExternalProgram.9") + getJobProperties().getKey() + " => " + ObjectUtils.getStatusAsString(getJobProperties().getStatus()));
 							getJobProperties().setStatus(JobProperties.READY);
