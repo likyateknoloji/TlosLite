@@ -71,7 +71,7 @@ public class HtmlFileReaderV2 {
 		str += "    ModalPopups.Alert('tlosLiteAboutBox',"; //$NON-NLS-1$
 		str += "        '<div style=\\'float:left;\\'><img src=\\'images/icon2.gif\\'></div><div style=\\'float:left; padding-left:5px;\\'>" + LocaleMessages.getString("HtmlFileReaderV2.12") + "</div>',"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		str += "        '<div style=\\'\\'>' +";  //$NON-NLS-1$
-		str += "		'<div style=\\'float:left; padding-left:10px;\\'><img src=\\'images/1.8.30.gif\\'></div>' +";  //$NON-NLS-1$
+		str += "		'<div style=\\'float:left; padding-left:10px;\\'><img src=\\'images/1.8.31.gif\\'></div>' +";  //$NON-NLS-1$
 		str += "        '<div style=\\'float:left; padding-left:10px;\\'><br/>Likya Bilgi Teknolojileri ve İletişim Hizmetleri Ltd. Şti.' +";  //$NON-NLS-1$
 		str += "		'<br/><br/>&#169; "; //$NON-NLS-1$
 		str += "		2008-' + curr_year + "; //$NON-NLS-1$
