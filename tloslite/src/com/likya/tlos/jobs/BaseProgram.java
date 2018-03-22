@@ -192,6 +192,8 @@ public abstract class BaseProgram extends Job {
 					sendEmail();
 					getJobProperties().setStatus(JobProperties.READY);
 				} else {
+					//Job'in planlanan calisma vakti gelmediyse (elle manuel calistirildiysa), calisma zamanini planlanan zamana kur
+					//planlanan calisma zamani gectiyse bu durumda da calisma zamanini bir sonraki calisma zamanina kur
 					if(Calendar.getInstance().getTime().before(getJobProperties().getJobPlannedStartTime())) {
 						getJobProperties().setTime(getJobProperties().getJobPlannedStartTime());
 					} else {
@@ -245,7 +247,13 @@ public abstract class BaseProgram extends Job {
 				} 
 				
 				if(this instanceof ExternalProgram && !getJobProperties().isBlocker() && getJobProperties().getStatus() == JobProperties.FAIL) {
-					DateUtils.iterateNextDate(getJobProperties());	
+					//Job'in planlanan calisma vakti gelmediyse (elle manuel calistirildiysa), calisma zamanini planlanan zamana kur
+					//planlanan calisma zamani gectiyse bu durumda da calisma zamanini bir sonraki calisma zamanina kur
+					if(Calendar.getInstance().getTime().before(getJobProperties().getJobPlannedStartTime())) {
+						getJobProperties().setTime(getJobProperties().getJobPlannedStartTime());
+					} else {
+						DateUtils.iterateNextDate(getJobProperties());
+					}
 				}
 				
 				TlosServer.getLogger().info(getJobProperties().getKey() + LocaleMessages.getString("ExternalProgram.12")); //$NON-NLS-1$
