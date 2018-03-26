@@ -48,8 +48,8 @@ Senaryo bilgilerini bulunduran dosya
         autorestart(true,false),
           	 true ise; 
         		    iş fail ettiğinde;
-        			    | delay(ms) | count(sayı) : eğer true ise ve başka bilgi verilmezse ya da delay < 1000 ise veya sayı < 1 ise; delay = 1000; sayı = 1 kabul edilir
-        			    verilen sayı kadar verilen aralıklarla tekrar çalıştırır.
+        			    | delay(ms) | count(sayı) : eğer true ise ve başka bilgi verilmezse ya da delay < 1000 ise veya sayı < 0 ise; delay = 1000; sayı = 1 kabul edilir
+        			    verilen sayı kadar verilen aralıklarla tekrar çalıştırır. sayı = 0 özel bir durumdur, iş timeout'a düşerse bir daha tekrar etmez.
           	 false ise;
         		    fail edince hiç bir şey yapmaz
         bitis uyari kodu,
@@ -60,8 +60,7 @@ Senaryo bilgilerini bulunduran dosya
              verilmek istenmezse (\null) seklinde, bir veya daha fazla hata kelimesi ise (HATA1|Hata2|hata3) seklinde girilebilir.
 -->
 </comment>
-<entry key="version">V1.8.30</entry>
-<!-- >entry key="job1">A,jobs/job01.sh,system,logUx01.log,yok,S,00:00:00-23:59:59,300,false,0,1,\null</entry>
-<entry key="job2">A,jobs/job02.sh,system,logUx02.log,job1,S,00:00:00-23:59:59,300,false,0,1,\null</entry-->
-<entry key="job3">A,jobs/job01.sh,system,logUx01.log,yok,M,00:00:00-23:59:59,-1,false,0,1,\null</entry>
+<entry key="version">V1.8.31</entry>
+<entry key="job1">A,jobs/job01.sh,system,logUx01.log,yok,S,00:00:00-23:59:59,300,false,0,1,\null</entry>
+<entry key="job2">A,jobs/job02.sh,system,logUx02.log,job1,S,00:00:00-23:59:59,300,false,0,1,\null</entry>
 </properties>

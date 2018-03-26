@@ -84,6 +84,7 @@ public class ScenarioLoaderUtil {
 		boolean autoRetry = false;
 		int autorRetryDelay = 1000;
 		int autoRetryCount = 1;
+		int autoRetryCountSpecial = 0;
 
 		StringTokenizer autoRetryString = new StringTokenizer(autoRetryStr, "|"); //$NON-NLS-1$
 		ArrayList<String> autoRetryList = new ArrayList<String>();
@@ -96,7 +97,7 @@ public class ScenarioLoaderUtil {
 		if (autoRetryList.size() >= 1 && Validation.getBooleanString("autoRestart", autoRetryList.get(0))) {
 			autoRetry = Validation.getBooleanString("autoRestart", autoRetryList.get(0));
 			autorRetryDelay = (autoRetryList.size() >= 2 && Integer.parseInt(autoRetryList.get(1)) > autorRetryDelay) ? autorRetryDelay = Integer.parseInt(autoRetryList.get(1)) : autorRetryDelay;
-			autoRetryCount = (autoRetryList.size() == 3 && Integer.parseInt(autoRetryList.get(2)) > autoRetryCount) ? autoRetryCount = Integer.parseInt(autoRetryList.get(2)) : autoRetryCount;
+			autoRetryCount = (autoRetryList.size() == 3 && Integer.parseInt(autoRetryList.get(2)) >= autoRetryCountSpecial) ? autoRetryCount = Integer.parseInt(autoRetryList.get(2)) : autoRetryCount;
 		}
 
 		return new AutoRetryInfo(autoRetry, autorRetryDelay, autoRetryCount);
