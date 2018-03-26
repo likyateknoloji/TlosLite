@@ -33,7 +33,7 @@ import com.likya.tloslite.model.ClientInfo;
 
 public abstract class TlosServerBase implements Runnable {
 
-	private static final String version = "V1.8.30"; //$NON-NLS-1$
+	private static final String version = "V1.8.31"; //$NON-NLS-1$
 
 	private static int executionState = TlosInfo.STATE_WORKING;
 	

@@ -225,7 +225,8 @@ public abstract class BaseProgram extends Job {
 				
 				if (getJobProperties().isAutoRetry() && retryFlag && onePreviousStatus != JobProperties.STOP) {
 					TlosServer.getLogger().info(LocaleMessages.getString("ExternalProgram.11") + getJobProperties().getKey()); //$NON-NLS-1$
-
+					
+					//autoRetryCount = 0 ==> job timeout'a dussun ve tekrar calismasin, ozel durum. autoRetryCountDefault = 1
 					if(retryCounter <= getJobProperties().getAutoRetryCount()) {
 						retryCounter++;
 						try {
