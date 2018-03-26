@@ -43,7 +43,7 @@ scheduledDays(opsiyonel, varsayılan : 1,2,3,4,5,6,7) : Çalışma günleri, Tlo
 			(Pazar[1]-Cumartesi[7])
 
 </comment>
-<entry key="version">V1.8.30</entry>
+<entry key="version">V1.8.31</entry>
 
 <entry key="scenarioName">Test</entry>
 <entry key="scenarioFile">senaryo-ux.xml</entry>
